@@ -10,7 +10,7 @@ public class Receiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
 
         if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-            Intent i = new Intent(context, MyService.class);
+            Intent i = new Intent(context, UpdateLocationService.class);
             LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (statusOfGPS) {

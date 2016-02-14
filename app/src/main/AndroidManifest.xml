@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="gr.hua.android.gpsapplication">
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,14 +25,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".MyService"/>
+
+        <service android:name=".UpdateLocationService" />
+        <service android:name=".GetLocationService" />
+
         <provider
-            android:authorities="gr.hua.android.dataprovider"
             android:name=".DataProvider"
+            android:authorities="gr.hua.android.gpsapplication"
+            android:enabled="true"
             android:exported="true" />
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
 </manifest>

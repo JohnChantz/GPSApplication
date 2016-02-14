@@ -22,7 +22,8 @@ public class Location {
         this.longtitude = longtitude;
     }
 
-    public Location() {}
+    public Location() {
+    }
 
     public String getUserID() {
         return userID;
@@ -32,7 +33,9 @@ public class Location {
         this.userID = userID;
     }
 
-    public String getUsername() {return username;}
+    public String getUsername() {
+        return username;
+    }
 
     public void setUsername(String username) {
         this.username = username;

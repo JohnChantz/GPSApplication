@@ -15,8 +15,7 @@ import java.util.TimerTask;
 
 public class UpdateLocation extends TimerTask {
 
-    private Location location;
-    String locationCoordinates;
+    private String locationCoordinates;
 
     public UpdateLocation() {
     }
@@ -26,20 +25,8 @@ public class UpdateLocation extends TimerTask {
         new LocationUpdater().execute("");
     }
 
-    public UpdateLocation(String locationCoordinates) {
-        this.locationCoordinates = locationCoordinates;
-    }
-
-    public UpdateLocation(Location location) {
-        this.location = location;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLocationCoordinates(String location) {
+        this.locationCoordinates = location;
     }
 
     private class LocationUpdater extends AsyncTask<String, String, String> {
@@ -65,17 +52,13 @@ public class UpdateLocation extends TimerTask {
 
         public void updateUserLocation() throws IOException {
 
-//        String userId = getUserIdSomehow();
-//        String username = getUsernameSomehow();
-//        String location = getCurrentLocationSomehow();
             String userId = "userIdTest";
             String username = "usernameTest";
-            String location = "test_test";
 
             Map<String, Object> params = new LinkedHashMap<>();
             params.put("userId", userId);
             params.put("username", username);
-            params.put("location", location);
+            params.put("location", locationCoordinates);
 
             StringBuilder postData = new StringBuilder();
             for (Map.Entry<String, Object> param : params.entrySet()) {
@@ -119,10 +102,6 @@ public class UpdateLocation extends TimerTask {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-//            Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-//            for (int c = in.read(); c != -1; c = in.read())
-//                System.out.print((char) c);
         }
     }
 }

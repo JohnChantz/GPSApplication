@@ -9,13 +9,22 @@ import android.net.Uri;
 
 public class DataProvider extends ContentProvider {
 
-    private static final String AUTHORITY = "gr.hua.android.dataprovider";
-    private static final String PATH = "dataprovider";
+    private static final String AUTHORITY = "gr.hua.android.gpsapplication/";
+    private static final String PATH = "locations";
+    private static final Uri uri = Uri.parse("content://" + AUTHORITY + PATH);
 
-    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final int POST = 1;
+    private static final int GET = 2;
+
+
+    private static final UriMatcher mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(AUTHORITY, PATH, 1);
+        mUriMatcher.addURI(AUTHORITY, PATH + "/add", POST);
+    }
+
+    static {
+        mUriMatcher.addURI(AUTHORITY, PATH + "/get", GET);
     }
 
     DBHelper mDBHelper;
@@ -34,10 +43,10 @@ public class DataProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        long id = -1;
+        long id;
         SQLiteDatabase mDB = mDBHelper.getWritableDatabase();
-        switch (sUriMatcher.match(uri)) {
-            case 1:
+        switch (mUriMatcher.match(uri)) {
+            case POST:
                 id = mDB.insert(DBHelper.TABLENAME, null, values);
                 break;
             default:
@@ -53,12 +62,11 @@ public class DataProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase mDB = mDBHelper.getReadableDatabase();
         Cursor mCursor;
-        switch (sUriMatcher.match(uri)) {
-            case 1:
+        switch (mUriMatcher.match(uri)) {
+            case GET:
                 mCursor = mDB.query(DBHelper.TABLENAME, null, null, null, null, null, null);
                 break;
             default:

@@ -1,8 +1,12 @@
 package gr.hua.android.gpsapplication;
 
+import android.app.Service;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -15,21 +19,41 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class GetLocations {
+public class GetLocationService extends Service {
 
-    Uri uri = Uri.parse("gr.hua.android.gpsapplication/DataProvider");
+    Uri uri = Uri.parse("content://gr.hua.android.gpsapplication/locations/add");
     ContentValues values = new ContentValues();
     ArrayList<Location> locations = new ArrayList<>();
     LocationUpdater locationUpdater = new LocationUpdater();
 
+    @Nullable
+    @Override       //not used
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
-    protected ContentValues addToDataProvider() {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        LocationUpdater locationUpdater = new LocationUpdater();
+        locationUpdater.execute("");
+//        GetLocations getLocations = new GetLocations();
+//        getLocations.executeRequest();
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    protected void addToDataProvider() {
         for (Location loc : locations) {
             values.put(DBHelper.USERID, loc.getUserID());
             values.put(DBHelper.USERNAME, loc.getUsername());
             values.put(DBHelper.LOCATION, loc.getCurrent_location());
         }
-        return values;
+        this.getContentResolver().insert(uri, values);
     }
 
     public void executeRequest() {

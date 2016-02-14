@@ -15,12 +15,11 @@ import android.widget.Toast;
 
 import java.util.Timer;
 
-public class MyService extends Service {
+public class UpdateLocationService extends Service {
     Timer mTimer = new Timer();
     String userLocation;
     long period = 30000;
     long delay = 5000;
-    UpdateLocation foo = new UpdateLocation();
 
     @Nullable
     @Override
@@ -30,9 +29,10 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flag, int startId) {
+        super.onStartCommand(intent, flag, startId);
 
-//        UpdateLocation foo = new UpdateLocation();
-//        mTimer.scheduleAtFixedRate(foo, delay, period);
+        final UpdateLocation updateLocation = new UpdateLocation();
+        mTimer.scheduleAtFixedRate(updateLocation, delay, period);
 
         Toast.makeText(getApplicationContext(), "Service Started!", Toast.LENGTH_SHORT).show();
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -50,11 +50,9 @@ public class MyService extends Service {
             @Override
             public void onLocationChanged(Location location) {
                 userLocation = Double.toString(location.getLatitude()) + "_" + Double.toString(location.getLongitude());
-//                Intent i = new Intent();
-//                i.putExtra("location", userLocation);
-                System.out.println("Location Changed!");
-                System.out.println(userLocation);
-//                foo.run();
+                updateLocation.setLocationCoordinates(userLocation);
+//                System.out.println("Location Changed!");
+//                System.out.println(userLocation);
             }
 
             @Override       //not used
@@ -63,12 +61,12 @@ public class MyService extends Service {
 
             @Override       //not used
             public void onProviderEnabled(String provider) {
-                Toast.makeText(MyService.this, "GPS enabled " + provider, Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateLocationService.this, "GPS enabled " + provider, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-                Toast.makeText(MyService.this, "GPS disabled " + provider, Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateLocationService.this, "GPS disabled " + provider, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -78,7 +76,7 @@ public class MyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(MyService.this, "Service Destroyed", Toast.LENGTH_SHORT).show();
-//        mTimer.cancel();
+        Toast.makeText(UpdateLocationService.this, "Service Destroyed", Toast.LENGTH_SHORT).show();
+        mTimer.cancel();
     }
 }

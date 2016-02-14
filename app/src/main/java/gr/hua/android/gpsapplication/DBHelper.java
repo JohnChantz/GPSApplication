@@ -13,9 +13,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLENAME = "user_locations";
     private static final int DBVERSION = 1;
-    private static final String USERID = "_USERID";
-    private static final String USERNAME = "_USERNAME";
-    private static final String LOCATION = "_LOCATION";
+    public static final String USERID = "_USERID";
+    public static final String USERNAME = "_USERNAME";
+    public static final String LOCATION = "_CURRENTLOCATION";
 
     public static ContentValues fillRow(Location loc) {
         ContentValues values = new ContentValues();
